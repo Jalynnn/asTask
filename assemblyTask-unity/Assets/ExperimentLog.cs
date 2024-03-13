@@ -10,6 +10,9 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEditor.Build.Content;
 
+// LSL requires
+using LSL;
+
 public class ExperimentLog : MonoBehaviour
 {
     public static ExperimentLog instance;
@@ -22,6 +25,12 @@ public class ExperimentLog : MonoBehaviour
     public float time_s = 0;
     float tempTime = 0f;
     int counter = 1;
+
+    // LSL Requires
+    string StreamName = "LSL4Unity.Samples.SimpleCollisionEvent";
+    string StreamType = "Markers";
+    private StreamOutlet outlet;
+    private string[] sample = {""};
 
     // Start is called before the first frame update
     void Start()
@@ -117,7 +126,10 @@ public class ExperimentLog : MonoBehaviour
             writer.WriteLine(newLine);
         }
 
+        int nominal = NominalData(category, action, errorType);
+        lslStuff(nominal);
     }
+
     // This method adds a new line to the wide log file. Francisco wanted this as a sort of summary of the experiment data.
     public void AddWideData(int trialNumber, int mistakesMade)
     {
@@ -166,6 +178,55 @@ public class ExperimentLog : MonoBehaviour
         counter++;
         File.WriteAllLines(filePathW, lines);
 
+    }
+
+    public int NominalData(string category = "n/a", string action = "n/a", string errorType = "n/a")
+    {
+        switch (category, action, errorType)
+        {
+            case ("trial", "complete", "n/a"):
+                return 1;
+            case ("trial", "continued", "n/a"):
+                return 2;
+            case ("trial", "loaded", "n/a"):
+                return 3;
+            case ("trial", "started", "n/a"):
+                return 4;
+            case ("short", "correct placement", "n/a"):
+                return 5;
+            case ("short", "error", "placement"):
+                return 6;
+            case ("short", "error", "length"):
+                return 7;
+            case ("short", "error", "color"):
+                return 8;
+            case ("medium", "correct placement", "n/a"):
+                return 9;
+            case ("medium", "error", "placement"):
+                return 10;
+            case ("medium", "error", "length"):
+                return 11;
+            case ("medium", "error", "color"):
+                return 12;
+            case ("large", "correct placement", "n/a"):
+                return 13;
+            case ("large", "error", "placement"):
+                return 14;
+            case ("large", "error", "length"):
+                return 15;
+            case ("large", "error", "color"):
+                return 16;
+            default:
+                return 250; // 0 is not acceptable --> 1 to 255
+        }
+    }
+
+    public void lslStuff(int nominal) {
+        if (outlet != null)
+        {
+            sample[0] = nominal.ToString();
+            outlet.push_sample(sample);
+        }
     }
 
 }

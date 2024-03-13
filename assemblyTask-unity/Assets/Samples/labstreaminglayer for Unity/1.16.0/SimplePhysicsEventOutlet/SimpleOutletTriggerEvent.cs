@@ -56,7 +56,7 @@ namespace LSL4Unity.Samples.SimplePhysicsEvent
         public void lslStuff() {
             if (outlet != null)
             {
-                sample[0] = "TriggerEnter " + gameObject.GetInstanceID();
+                sample[0] = "Start Button Pressed ID:" + gameObject.GetInstanceID();
                 // Debug.Log(sample[0]);
                 outlet.push_sample(sample);
             }
