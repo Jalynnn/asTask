@@ -1,3 +1,4 @@
+using LSL4Unity.Samples.SimplePhysicsEvent;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,5 +41,8 @@ public class FindSM : MonoBehaviour
     {
         instrManager.dataLog("Trial", "continued");
     }
-
+    public void LSLCall()
+    {
+        sceneD.GetComponent<SimpleOutletTriggerEvent>().lslStuff();
+    }
 }

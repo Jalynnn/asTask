@@ -364,7 +364,7 @@ PrefabInstance:
     - target: {fileID: 4889592234236265117, guid: 29bccb021597e414b8d4000b3a67e27b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4889592234236265117, guid: 29bccb021597e414b8d4000b3a67e27b,
         type: 3}
@@ -403,6 +403,11 @@ PrefabInstance:
       objectReference: {fileID: 596011748}
     - target: {fileID: 4889592234236265117, guid: 29bccb021597e414b8d4000b3a67e27b,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Target
+      value: 
+      objectReference: {fileID: 596011748}
+    - target: {fileID: 4889592234236265117, guid: 29bccb021597e414b8d4000b3a67e27b,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetActive
       objectReference: {fileID: 0}
@@ -414,7 +419,7 @@ PrefabInstance:
     - target: {fileID: 4889592234236265117, guid: 29bccb021597e414b8d4000b3a67e27b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_MethodName
-      value: StartTrial
+      value: LSLCall
       objectReference: {fileID: 0}
     - target: {fileID: 4889592234236265117, guid: 29bccb021597e414b8d4000b3a67e27b,
         type: 3}
@@ -435,6 +440,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4889592234236265117, guid: 29bccb021597e414b8d4000b3a67e27b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[5].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8287602429359275935, guid: 29bccb021597e414b8d4000b3a67e27b,
         type: 3}
