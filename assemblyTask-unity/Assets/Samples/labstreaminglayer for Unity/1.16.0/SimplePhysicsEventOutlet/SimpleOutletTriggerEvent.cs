@@ -53,6 +53,7 @@ namespace LSL4Unity.Samples.SimplePhysicsEvent
                 outlet.push_sample(sample);
             }
         }
+        
         public void lslStuff() {
             if (outlet != null)
             {

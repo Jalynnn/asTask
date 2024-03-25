@@ -11,8 +11,10 @@ using UnityEngine.SceneManagement;
 using UnityEditor.Build.Content;
 
 // Jalynn: LSL requires
+/*
 using LSL;
 using System.Diagnostics;
+*/
 
 public class ExperimentLog : MonoBehaviour
 {
@@ -28,11 +30,13 @@ public class ExperimentLog : MonoBehaviour
     int counter = 1;
 
     // Jalynn: LSL Requires
+    /*
     string StreamName = "LSL4Unity.Samples.SimpleCollisionEvent";
     string StreamType = "Markers";
     private StreamOutlet outlet;
     private string[] sample = {""};
     private int[] samples = {0}; // TEMP
+    */
 
     // Start is called before the first frame update
     void Start()
@@ -129,9 +133,11 @@ public class ExperimentLog : MonoBehaviour
         }
 
         // Jalynn: LSL Required
+        /*
         int nominal = NominalData(sceneName, category, action, errorType);
         UnityEngine.Debug.Log("This is the scene name: " + sceneName);
         lslStuff(nominal);
+        */
     }
 
     // This method adds a new line to the wide log file. Francisco wanted this as a sort of summary of the experiment data.
@@ -183,7 +189,7 @@ public class ExperimentLog : MonoBehaviour
         File.WriteAllLines(filePathW, lines);
 
     }
-
+/*
     // Jalynn: LSL Required
     public int NominalData(string sceneName = "n/a", string category = "n/a", string action = "n/a", string errorType = "n/a")
     {
@@ -254,4 +260,6 @@ public class ExperimentLog : MonoBehaviour
             outlet.push_sample(samples);
         }
     }
+    */
+
 }
