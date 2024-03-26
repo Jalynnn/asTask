@@ -10,6 +10,10 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEditor.Build.Content;
 
+// Jalynn: LSL requires
+using LSL;
+using System.Diagnostics;
+
 public class ExperimentLog : MonoBehaviour
 {
     public static ExperimentLog instance;
@@ -22,6 +26,13 @@ public class ExperimentLog : MonoBehaviour
     public float time_s = 0;
     float tempTime = 0f;
     int counter = 1;
+
+    // Jalynn: LSL Requires
+    string StreamName = "LSL4Unity.Samples.SimpleCollisionEvent";
+    string StreamType = "Markers";
+    private StreamOutlet outlet;
+    private string[] sample = {""};
+    private int[] samples = {0}; // TEMP
 
     // Start is called before the first frame update
     void Start()
@@ -117,7 +128,11 @@ public class ExperimentLog : MonoBehaviour
             writer.WriteLine(newLine);
         }
 
+        // Jalynn: LSL Required
+        int nominal = NominalData(sceneName, category, action, errorType);
+        lslStuff(nominal);
     }
+
     // This method adds a new line to the wide log file. Francisco wanted this as a sort of summary of the experiment data.
     public void AddWideData(int trialNumber, int mistakesMade)
     {
@@ -155,17 +170,99 @@ public class ExperimentLog : MonoBehaviour
         if (counter == 1)
         {
             lines[0] += "Participant_Number;Shape" + counter + ";Condition" + counter + ";Adaptivity" + counter + ";PositionInExp" + counter + ";Trial" + counter + ";TotalTime" + counter + ";MistakesMade" + counter + ";";
-            Debug.Log("Added Lines");
+            UnityEngine.Debug.Log("Added Lines"); // Jalynn: Added UnityEngine.
         }
         else
         {
             lines[0] += "Shape" + counter + ";Condition" + counter + ";Adaptivity" + counter + ";PositionInExp" + counter + ";Trial" + counter + ";TotalTime" + counter + ";MistakesMade" + counter + ";";
-            Debug.Log("Added Lines 2");
+            UnityEngine.Debug.Log("Added Lines 2"); // Jalynn: Added UnityEngine.
         }
         lines[^1] += newLine;
         counter++;
         File.WriteAllLines(filePathW, lines);
 
+    }
+
+    // Jalynn: LSL Required
+    public int NominalData(string sceneName = "n/a", string category = "n/a", string action = "n/a", string errorType = "n/a")
+    {
+        UnityEngine.Debug.Log("This is the scene name: " + sceneName);
+        string[] splitSceneName = sceneName.Split('_');
+        string shape = splitSceneName[0];
+        UnityEngine.Debug.Log("This is the shape: " + shape);
+        /*switch (shape)
+        {
+            case ("A"): return 1;
+            case ("B"): return 2;
+            case ("C"): return 3;
+            case ("D"): return 4;
+            case ("E"): return 5;
+            case ("F"): return 6;
+            case ("G"): return 7;
+            case ("H"): return 8;
+            case("Practice"): return 9;
+            case("PracticeColor"): return 99;
+        }*/
+
+        UnityEngine.Debug.Log("This is the category: " + category);
+        UnityEngine.Debug.Log("This is the action: " + action);
+        UnityEngine.Debug.Log("This is the errorType: " + errorType);
+        switch (category, action, errorType)
+        {
+            case ("Trial", "complete", "n/a"):
+                return 10;
+            case ("Trial", "continued", "n/a"):
+                return 20;
+            case ("Trial", "loaded", "n/a"):
+                return 30;
+            case ("Trial", "started", "n/a"):
+                return 40;
+            case ("ShortBar", "Correct placement", "n/a"):
+                return 50;
+            case ("ShortBar", "Error", "placement"): // distance
+                return 60;
+            case ("ShortBar", "Error", "length"):
+                return 70;
+            case ("ShortBar", "Error", "color"):
+                return 80;
+            case ("MediumBar", "Correct placement", "n/a"):
+                return 90;
+            case ("MediumBar", "Error", "placement"):
+                return 100;
+            case ("MediumBar", "Error", "length"):
+                return 110;
+            case ("MediumBar", "Error", "color"):
+                return 120;
+            case ("LongBar", "Correct placement", "n/a"):
+                return 130;
+            case ("LongBar", "Error", "placement"):
+                return 140;
+            case ("LongBar", "Error", "length"):
+                return 150;
+            case ("LongBar", "Error", "color"):
+                return 160;
+        }
+
+        return 222; // Error
+    }
+
+    // Jalynn: LSL Required
+    public void lslStuff(int nominal) {
+        UnityEngine.Debug.Log("This is the nominal: " + nominal.ToString());
+        if (outlet != null)
+        {
+            UnityEngine.Debug.Log("Outlet doesn't equal null");
+            // Original: Will I still have problems since I am using .ToString()?
+            sample[0] = nominal.ToString();
+            outlet.push_sample(sample);
+
+            // What if we just try without the conversion
+            // outlet.push_sample(nominal);
+
+            // Or maybe it has to be in an []
+            // samples[0] = nominal;
+            // outlet.push_sample(samples);
+        }
     }
 
 }
