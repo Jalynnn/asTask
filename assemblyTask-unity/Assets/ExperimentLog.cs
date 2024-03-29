@@ -10,11 +10,9 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEditor.Build.Content;
 
-// Jalynn: LSL requires
-/*
+// Jalynn: LSL Requires this section
 using LSL;
 using System.Diagnostics;
-*/
 
 public class ExperimentLog : MonoBehaviour
 {
@@ -29,14 +27,12 @@ public class ExperimentLog : MonoBehaviour
     float tempTime = 0f;
     int counter = 1;
 
-    // Jalynn: LSL Requires
-    /*
+    // Jalynn: LSL Requires this section
     string StreamName = "LSL4Unity.Samples.SimpleCollisionEvent";
     string StreamType = "Markers";
     private StreamOutlet outlet;
     private string[] sample = {""};
-    private int[] samples = {0}; // TEMP
-    */
+    private int eventNumber = 0; // TEMP
 
     // Start is called before the first frame update
     void Start()
@@ -63,6 +59,15 @@ public class ExperimentLog : MonoBehaviour
 // activate this for testing
         //if (SceneManager.GetActiveScene().name != "Tutorial Video" && instance == this)
           //  SetParticipantNumber(rnd.Next(1000, 9999)); 
+
+        // Jalynn: LSL Requires this section
+        var hash = new Hash128();
+        hash.Append(StreamName);
+        hash.Append(StreamType);
+        hash.Append(gameObject.GetInstanceID());
+        StreamInfo streamInfo = new StreamInfo(StreamName, StreamType, 1, LSL.LSL.IRREGULAR_RATE,
+            channel_format_t.cf_string, hash.ToString());
+        outlet = new StreamOutlet(streamInfo);
     }
     // Update is called once per frame
     void Update()
@@ -130,14 +135,14 @@ public class ExperimentLog : MonoBehaviour
         using (writer = File.AppendText(filePath))
         {
             writer.WriteLine(newLine);
+
+            // Jalynn: LSL Requires this section
+            // Every new line written should have an associated trigger event sent
+            lslStuff(NominalData(eventNumber, sceneName, category, action, errorType));
         }
 
-        // Jalynn: LSL Required
-        /*
-        int nominal = NominalData(sceneName, category, action, errorType);
-        UnityEngine.Debug.Log("This is the scene name: " + sceneName);
-        lslStuff(nominal);
-        */
+        // Jalynn: Temp - Is LSL triggering every AddData
+        eventNumber++; 
     }
 
     // This method adds a new line to the wide log file. Francisco wanted this as a sort of summary of the experiment data.
@@ -189,77 +194,136 @@ public class ExperimentLog : MonoBehaviour
         File.WriteAllLines(filePathW, lines);
 
     }
-/*
-    // Jalynn: LSL Required
-    public int NominalData(string sceneName = "n/a", string category = "n/a", string action = "n/a", string errorType = "n/a")
+
+    // Jalynn: LSL Requires this section
+    public int NominalData(int eventNumber, string sceneName = "n/a", string category = "n/a", string action = "n/a", string errorType = "n/a")
     {
-        switch (sceneName)
-        {
-            case ("A"): return 1;
-            case ("B"): return 2;
-            case ("C"): return 3;
-            case ("D"): return 4;
-            case ("E"): return 5;
-            case ("F"): return 6;
-            case ("G"): return 7;
-            case ("H"): return 8;
-        }
+        UnityEngine.Debug.Log("Jalynn: This is the scene name: " + sceneName);
+        string[] splitSceneName = sceneName.Split('_');
+        string shape = splitSceneName[0];
+        UnityEngine.Debug.Log("Jalynn: This is the shape: " + shape);
+
+        int nominal = 222; // Default is error
+
+        UnityEngine.Debug.Log("Jalynn: EventNumber: " + eventNumber);
+        UnityEngine.Debug.Log("Jalynn: This is the category: " + category);
+        UnityEngine.Debug.Log("Jalynn: This is the action: " + action);
+        UnityEngine.Debug.Log("Jalynn: This is the errorType: " + errorType);
 
         switch (category, action, errorType)
         {
-            case ("trial", "complete", "n/a"):
-                return 10;
-            case ("trial", "continued", "n/a"):
-                return 20;
-            case ("trial", "loaded", "n/a"):
-                return 30;
-            case ("trial", "started", "n/a"):
-                return 40;
-            case ("short", "correct placement", "n/a"):
-                return 50;
-            case ("short", "error", "placement"):
-                return 60;
-            case ("short", "error", "length"):
-                return 70;
-            case ("short", "error", "color"):
-                return 80;
-            case ("medium", "correct placement", "n/a"):
-                return 90;
-            case ("medium", "error", "placement"):
-                return 100;
-            case ("medium", "error", "length"):
-                return 110;
-            case ("medium", "error", "color"):
-                return 120;
-            case ("large", "correct placement", "n/a"):
-                return 130;
-            case ("large", "error", "placement"):
-                return 140;
-            case ("large", "error", "length"):
-                return 150;
-            case ("large", "error", "color"):
-                return 160;
+            case ("Trial", "complete", "n/a"):
+                nominal = 10;
+                break;
+            case ("Trial", "continued", "n/a"):
+                nominal = 20;
+                break;
+            case ("Trial", "loaded", "n/a"):
+                nominal = 30;
+                break;
+            case ("Trial", "started", "n/a"):
+                nominal = 40;
+                break;
+            case ("ShortBar", "Correct placement", "n/a"):
+                nominal = 50;
+                break;
+            case ("ShortBar", "Error", "placement"):
+                nominal = 60;
+                break;
+            case ("ShortBar", "Error", "length"):
+                nominal = 70;
+                break;
+            case ("ShortBar", "Error", "color"):
+                nominal = 80;
+                break;
+            case ("ShortBar", "Error", "distance"):
+                nominal = 90;
+                break;
+            case ("MediumBar", "Correct placement", "n/a"):
+                nominal = 100;
+                break;
+            case ("MediumBar", "Error", "placement"):
+                nominal = 110;
+                break;
+            case ("MediumBar", "Error", "length"):
+                nominal = 120;
+                break;
+            case ("MediumBar", "Error", "color"):
+                nominal = 130;
+                break;
+            case ("MediumBar", "Error", "distance"):
+                nominal = 140;
+                break;
+            case ("LongBar", "Correct placement", "n/a"):
+                nominal = 150;
+                break;
+            case ("LongBar", "Error", "placement"):
+                nominal = 160;
+                break;
+            case ("LongBar", "Error", "length"):
+                nominal = 170;
+                break;
+            case ("LongBar", "Error", "color"):
+                nominal = 180;
+                break;
+            case ("LongBar", "Error", "distance"):
+                nominal = 190;
+                break;
+            default:
+                nominal = 0;
+                break;
         }
 
-        return 222; // Error
+        switch (shape)
+        {
+            case ("A"): 
+                nominal += 1;
+                break;
+            case ("B"):
+                nominal += 2;
+                break;
+            case ("C"):
+                nominal += 3;
+                break;
+            case ("D"):
+                nominal += 4;
+                break;
+            case ("E"):
+                nominal += 5;
+                break;
+            case ("F"):
+                nominal += 6;
+                break;
+            case ("G"):
+                nominal += 7;
+                break;
+            case ("H"):
+                nominal += 8;
+                break;
+            case("Practice"):
+                nominal += 9;
+                break;
+            case("PracticeColor"):
+                nominal += 0;
+                break;
+        }
+
+        sceneName = "n/a";
+        category = "n/a"; 
+        action = "n/a";
+        errorType = "n/a";
+        return nominal;
     }
 
-    // Jalynn: LSL Required
+    // Jalynn: LSL Requires this section
     public void lslStuff(int nominal) {
+        UnityEngine.Debug.Log("Jalynn: This is the nominal: " + nominal.ToString());
         if (outlet != null)
         {
-            // Original: Will I still have problems since I am using .ToString()?
-            // sample[0] = nominal.ToString();
-            // outlet.push_sample(sample);
-
-            // What if we just try without the conversion
-            // outlet.push_sample(nominal);
-
-            // Or maybe it has to be in an []
-            samples[0] = nominal;
-            outlet.push_sample(samples);
+            sample[0] = nominal.ToString();
+            outlet.push_sample(sample);
+            UnityEngine.Debug.Log("Jalynn: Trigger sent");
         }
     }
-    */
 
 }
