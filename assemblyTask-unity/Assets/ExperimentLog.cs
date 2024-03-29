@@ -10,8 +10,12 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEditor.Build.Content;
 
+<<<<<<< Updated upstream
 // Jalynn: LSL requires
 /*
+=======
+// Jalynn: LSL Requires this section
+>>>>>>> Stashed changes
 using LSL;
 using System.Diagnostics;
 */
@@ -29,8 +33,12 @@ public class ExperimentLog : MonoBehaviour
     float tempTime = 0f;
     int counter = 1;
 
+<<<<<<< Updated upstream
     // Jalynn: LSL Requires
     /*
+=======
+    // Jalynn: LSL Requires this section
+>>>>>>> Stashed changes
     string StreamName = "LSL4Unity.Samples.SimpleCollisionEvent";
     string StreamType = "Markers";
     private StreamOutlet outlet;
@@ -63,6 +71,15 @@ public class ExperimentLog : MonoBehaviour
 // activate this for testing
         //if (SceneManager.GetActiveScene().name != "Tutorial Video" && instance == this)
           //  SetParticipantNumber(rnd.Next(1000, 9999)); 
+
+        // Jalynn: LSL Requires this section
+        var hash = new Hash128();
+        hash.Append(StreamName);
+        hash.Append(StreamType);
+        hash.Append(gameObject.GetInstanceID());
+        StreamInfo streamInfo = new StreamInfo(StreamName, StreamType, 1, LSL.LSL.IRREGULAR_RATE,
+            channel_format_t.cf_string, hash.ToString());
+        outlet = new StreamOutlet(streamInfo);
     }
     // Update is called once per frame
     void Update()
@@ -132,12 +149,17 @@ public class ExperimentLog : MonoBehaviour
             writer.WriteLine(newLine);
         }
 
+<<<<<<< Updated upstream
         // Jalynn: LSL Required
         /*
         int nominal = NominalData(sceneName, category, action, errorType);
         UnityEngine.Debug.Log("This is the scene name: " + sceneName);
         lslStuff(nominal);
         */
+=======
+        // Jalynn: LSL Requires this section
+        lslStuff(NominalData(sceneName, category, action, errorType));
+>>>>>>> Stashed changes
     }
 
     // This method adds a new line to the wide log file. Francisco wanted this as a sort of summary of the experiment data.
@@ -189,11 +211,23 @@ public class ExperimentLog : MonoBehaviour
         File.WriteAllLines(filePathW, lines);
 
     }
+<<<<<<< Updated upstream
 /*
     // Jalynn: LSL Required
     public int NominalData(string sceneName = "n/a", string category = "n/a", string action = "n/a", string errorType = "n/a")
     {
         switch (sceneName)
+=======
+
+    // Jalynn: LSL Requires this section
+    public int NominalData(string sceneName = "n/a", string category = "n/a", string action = "n/a", string errorType = "n/a")
+    {
+        UnityEngine.Debug.Log("Jalynn: This is the scene name: " + sceneName);
+        string[] splitSceneName = sceneName.Split('_');
+        string shape = splitSceneName[0];
+        UnityEngine.Debug.Log("Jalynn: This is the shape: " + shape);
+        /*switch (shape)
+>>>>>>> Stashed changes
         {
             case ("A"): return 1;
             case ("B"): return 2;
@@ -205,6 +239,12 @@ public class ExperimentLog : MonoBehaviour
             case ("H"): return 8;
         }
 
+<<<<<<< Updated upstream
+=======
+        UnityEngine.Debug.Log("Jalynn: This is the category: " + category);
+        UnityEngine.Debug.Log("Jalynn: This is the action: " + action);
+        UnityEngine.Debug.Log("Jalynn: This is the errorType: " + errorType);
+>>>>>>> Stashed changes
         switch (category, action, errorType)
         {
             case ("trial", "complete", "n/a"):
@@ -244,8 +284,9 @@ public class ExperimentLog : MonoBehaviour
         return 222; // Error
     }
 
-    // Jalynn: LSL Required
+    // Jalynn: LSL Requires this section
     public void lslStuff(int nominal) {
+<<<<<<< Updated upstream
         if (outlet != null)
         {
             // Original: Will I still have problems since I am using .ToString()?
@@ -258,6 +299,14 @@ public class ExperimentLog : MonoBehaviour
             // Or maybe it has to be in an []
             samples[0] = nominal;
             outlet.push_sample(samples);
+=======
+        UnityEngine.Debug.Log("Jalynn: This is the nominal: " + nominal.ToString());
+        if (outlet != null)
+        {
+            sample[0] = nominal.ToString();
+            outlet.push_sample(sample);
+            UnityEngine.Debug.Log("Jalynn: Trigger sent");
+>>>>>>> Stashed changes
         }
     }
     */
