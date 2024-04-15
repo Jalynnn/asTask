@@ -134,11 +134,13 @@ public class ExperimentLog : MonoBehaviour
         tempTime = miliS;
         using (writer = File.AppendText(filePath))
         {
-            writer.WriteLine(newLine);
-
             // Jalynn: LSL Requires this section
             // Every new line written should have an associated trigger event sent
-            lslStuff(NominalData(eventNumber, sceneName, category, action, errorType));
+            int nominal = NominalData(eventNumber, sceneName, category, action, errorType);
+            lslStuff(nominal);
+            newLine += ";" + nominal.ToString();
+
+            writer.WriteLine(newLine);
         }
 
         // Jalynn: Temp - Is LSL triggering every AddData
