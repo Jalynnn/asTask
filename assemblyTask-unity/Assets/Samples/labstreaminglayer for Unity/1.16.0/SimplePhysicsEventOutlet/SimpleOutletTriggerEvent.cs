@@ -54,12 +54,12 @@ namespace LSL4Unity.Samples.SimplePhysicsEvent
             }
         }
         
-        public void lslStuff() {
+        /*public void lslStuff() {
             if (outlet != null)
             {
                 sample[0] = "SimpleOutletTriggerEvent Start Button Pressed ID: " + gameObject.GetInstanceID();
                 outlet.push_sample(sample);
             }
-        }
+        }*/
     }
 } 
