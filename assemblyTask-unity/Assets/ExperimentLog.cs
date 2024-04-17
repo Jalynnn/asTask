@@ -26,6 +26,7 @@ public class ExperimentLog : MonoBehaviour
     public float time_s = 0;
     float tempTime = 0f;
     int counter = 1;
+    public bool testing = true;
 
     // Jalynn: LSL Requires this section
     string StreamName = "LSL4Unity.Samples.SimpleCollisionEvent";
@@ -56,9 +57,9 @@ public class ExperimentLog : MonoBehaviour
 
         // Make this GameObject persistent across scene loads.
         if (instance == this) DontDestroyOnLoad(transform.gameObject);
-// activate this for testing
-        //if (SceneManager.GetActiveScene().name != "Tutorial Video" && instance == this)
-          //  SetParticipantNumber(rnd.Next(1000, 9999)); 
+        // activate this for testing
+        if (SceneManager.GetActiveScene().name != "Tutorial Video" && instance == this && testing)
+            SetParticipantNumber(rnd.Next(1000, 9999));
 
         // Jalynn: LSL Requires this section
         var hash = new Hash128();
