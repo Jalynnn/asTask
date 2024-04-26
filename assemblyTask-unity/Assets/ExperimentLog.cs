@@ -272,6 +272,12 @@ public class ExperimentLog : MonoBehaviour
             case ("LongBar", "Error", "distance"):
                 nominal = 190;
                 break;
+            case ("WaitingRoomManager", "Rest Start", "n/a"):
+                nominal = 200;
+                break;
+            case ("WaitingRoomManager", "Rest Stop", "n/a"):
+                nominal = 210;
+                break;
             default:
                 nominal = 0;
                 break;

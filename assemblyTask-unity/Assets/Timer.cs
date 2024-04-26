@@ -16,22 +16,43 @@ public class Timer : MonoBehaviour
     public float waitingTime;
     GameObject managerObj;
     SceneDirector sceneDirector;
+
+    // Jalynn: Talk to experimenter before timer
+    public bool updated = false;
+
+    // Jalynn: Experiment Log
+    public GameObject manager;
+
     // Start is called before the first frame update
     void Start()
     {
+        // Jalynn: Talk to experimenter before timer
+        // StartCoroutine(updateBar());
 
-        StartCoroutine(updateBar());
-
+        // Jalynn: Experiment Log
+        manager = GameObject.FindWithTag("Manager");
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        // Jalynn: Talk to experimenter before timer - Experimenter has to press space bar
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (updated == false) // Only can start timer once
+            {
+                StartCoroutine(updateBar());
+                updated = true;
+            }
+        }
     }
     IEnumerator updateBar()
     {
-        if(dropdown == Options.Shape)
+
+        // Jalynn: Experiment Log
+        manager.GetComponent<ExperimentLog>().AddData(this.gameObject.name, "Rest Start");
+
+        if (dropdown == Options.Shape)
         {
            progress.text = waitingTime.ToString() + " s";
         }
@@ -39,14 +60,14 @@ public class Timer : MonoBehaviour
         managerObj = GameObject.FindWithTag("Manager");
         sceneDirector = managerObj.GetComponent<SceneDirector>();
 
-        if (sceneDirector.firstWait && dropdown == Options.WaitingRoom)
+        /*if (sceneDirector.firstWait && dropdown == Options.WaitingRoom)
         {
             progress.text = "Please talk to the experimenter.";
             sceneDirector.firstWait = false;
             yield break;
-        }
+        }*/
 
-        while (waitingTime >= 0)
+        while (waitingTime > 0)
         {
 
             yield return new WaitForSeconds(1f);
@@ -61,7 +82,7 @@ public class Timer : MonoBehaviour
             }
         }
 
-        if (dropdown == Options.WaitingRoom)
+        /*if (dropdown == Options.WaitingRoom)
         {
             progress.text = "Please talk to the experimenter.";
         }
@@ -69,6 +90,9 @@ public class Timer : MonoBehaviour
         {
             
             progress.enabled = false;
-        }
+        }*/
+
+        // Jalynn: Experiment Log
+        manager.GetComponent<ExperimentLog>().AddData(this.gameObject.name, "Rest Stop");
     }
 }

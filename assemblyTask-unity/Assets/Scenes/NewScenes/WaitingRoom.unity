@@ -2812,7 +2812,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropdown: 0
   progress: {fileID: 1455078100}
-  waitingTime: 20
+  waitingTime: 15
+  updated: 0
+  manager: {fileID: 0}
 --- !u!4 &1708445551
 Transform:
   m_ObjectHideFlags: 0
@@ -3024,7 +3026,7 @@ PrefabInstance:
     - target: {fileID: 2361052004123083522, guid: 77733789ea29fc042910e37f9f177df2,
         type: 3}
       propertyPath: m_text
-      value: 
+      value: Please talk to the experimenter
       objectReference: {fileID: 0}
     - target: {fileID: 2361052004123083522, guid: 77733789ea29fc042910e37f9f177df2,
         type: 3}
