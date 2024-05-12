@@ -945,6 +945,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3816796743060703914, guid: 9b861ef3652b0b949a5ec5df7aa8cc69,
+        type: 3}
+      propertyPath: considerColor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3829166700051744101, guid: 9b861ef3652b0b949a5ec5df7aa8cc69,
         type: 3}
       propertyPath: m_Layer
