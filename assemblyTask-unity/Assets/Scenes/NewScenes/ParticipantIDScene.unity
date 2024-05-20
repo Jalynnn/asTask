@@ -1639,7 +1639,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Practice
+          m_StringArgument: E_A2_AT
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 594427977}
