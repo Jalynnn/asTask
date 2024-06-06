@@ -9,6 +9,10 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
+// Jalynn: LSL Requires this section
+using LSL;
+using System.Diagnostics;
+
 public class ExperimentLog : MonoBehaviour
 {
     public static ExperimentLog instance;
@@ -24,6 +28,13 @@ public class ExperimentLog : MonoBehaviour
     public bool testing = true;
     public GameObject DebugLog;
     public bool toggleLog = false;
+
+    // Jalynn: LSL Requires this section
+    string StreamName = "LSL4Unity.Samples.SimpleCollisionEvent";
+    string StreamType = "Markers";
+    private StreamOutlet outlet;
+    private string[] sample = { "" };
+    private int eventNumber = 0; // TEMP
 
     // Start is called before the first frame update
     void Start()
@@ -62,6 +73,15 @@ public class ExperimentLog : MonoBehaviour
             if (DebugLog && toggleLog)
                 DebugLog.SetActive(true);
         }
+
+        // Jalynn: LSL Requires this section
+        var hash = new Hash128();
+        hash.Append(StreamName);
+        hash.Append(StreamType);
+        hash.Append(gameObject.GetInstanceID());
+        StreamInfo streamInfo = new StreamInfo(StreamName, StreamType, 1, LSL.LSL.IRREGULAR_RATE,
+            channel_format_t.cf_string, hash.ToString());
+        outlet = new StreamOutlet(streamInfo);
     }
     // Update is called once per frame
     void Update()
@@ -94,7 +114,7 @@ public class ExperimentLog : MonoBehaviour
 
 
         manager.participantID = participantNumber;
-        Debug.Log(manager.schedule[0]);
+        UnityEngine.Debug.Log(manager.schedule[0]); // Jalynn: Added UnityEngine
         filePath = filePath + "/Participant" + participantNumber.ToString() + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssf") + ".csv";
         filePathW = temp + "/WideParticipant" + participantNumber.ToString() + "_" + DateTime.Now.ToString("yyyyMMdd_HHmm") + ".csv";
         using (writer = File.CreateText(filePath))
@@ -150,9 +170,17 @@ public class ExperimentLog : MonoBehaviour
         tempTime = miliS;
         using (writer = File.AppendText(filePath))
         {
+            // Jalynn: LSL Requires this section
+            // Every new line written should have an associated trigger event sent
+            int nominal = NominalData(eventNumber, sceneName, category, action, errorType);
+            lslStuff(nominal);
+            newLine += "," + nominal.ToString();
+
             writer.WriteLine(newLine);
         }
 
+        // Jalynn: Temp - Is LSL triggering every AddData
+        eventNumber++;
     }
     // This method adds a new line to the wide log file. Francisco wanted this as a sort of summary of the experiment data.
     public void AddWideData(int trialNumber, int mistakesMade)
@@ -193,12 +221,12 @@ public class ExperimentLog : MonoBehaviour
         if (counter == 1)
         {
             lines[0] += "Participant_Number,Shape" + counter + ",Condition" + counter + ",Adaptivity" + counter + ",PositionInExp" + counter + ",Trial" + counter + ",TotalTime" + counter + ",MistakesMade" + counter + ",";
-            Debug.Log("Added Lines");
+            UnityEngine.Debug.Log("Added Lines"); // Jalynn: Added UnityEngine.
         }
         else
         {
             lines[0] += "Shape" + counter + ",Condition" + counter + ",Adaptivity" + counter + ",PositionInExp" + counter + ",Trial" + counter + ",TotalTime" + counter + ",MistakesMade" + counter + ",";
-            Debug.Log("Added Lines 2");
+            UnityEngine.Debug.Log("Added Lines 2"); // Jalynn: Added UnityEngine.
         }
         lines[^1] += newLine;
         counter++;
@@ -206,4 +234,141 @@ public class ExperimentLog : MonoBehaviour
 
     }
 
+    // Jalynn: LSL Requires this section
+    public int NominalData(int eventNumber, string sceneName = "n/a", string category = "n/a", string action = "n/a", string errorType = "n/a")
+    {
+        UnityEngine.Debug.Log("Jalynn: This is the scene name: " + sceneName);
+        string[] splitSceneName = sceneName.Split('_');
+        string shape = splitSceneName[0];
+        UnityEngine.Debug.Log("Jalynn: This is the shape: " + shape);
+
+        int nominal = 222; // Default is error
+
+        UnityEngine.Debug.Log("Jalynn: EventNumber: " + eventNumber);
+        UnityEngine.Debug.Log("Jalynn: This is the category: " + category);
+        UnityEngine.Debug.Log("Jalynn: This is the action: " + action);
+        UnityEngine.Debug.Log("Jalynn: This is the errorType: " + errorType);
+
+        switch (category, action, errorType)
+        {
+            case ("Trial", "complete", "n/a"):
+                nominal = 10;
+                break;
+            case ("Trial", "continued", "n/a"):
+                nominal = 20;
+                break;
+            case ("Trial", "loaded", "n/a"):
+                nominal = 30;
+                break;
+            case ("Trial", "started", "n/a"):
+                nominal = 40;
+                break;
+            case ("ShortBar", "Correct placement", "n/a"):
+                nominal = 50;
+                break;
+            case ("ShortBar", "Error", "placement"):
+                nominal = 60;
+                break;
+            case ("ShortBar", "Error", "length"):
+                nominal = 70;
+                break;
+            case ("ShortBar", "Error", "color"):
+                nominal = 80;
+                break;
+            case ("ShortBar", "Error", "distance"):
+                nominal = 90;
+                break;
+            case ("MediumBar", "Correct placement", "n/a"):
+                nominal = 100;
+                break;
+            case ("MediumBar", "Error", "placement"):
+                nominal = 110;
+                break;
+            case ("MediumBar", "Error", "length"):
+                nominal = 120;
+                break;
+            case ("MediumBar", "Error", "color"):
+                nominal = 130;
+                break;
+            case ("MediumBar", "Error", "distance"):
+                nominal = 140;
+                break;
+            case ("LongBar", "Correct placement", "n/a"):
+                nominal = 150;
+                break;
+            case ("LongBar", "Error", "placement"):
+                nominal = 160;
+                break;
+            case ("LongBar", "Error", "length"):
+                nominal = 170;
+                break;
+            case ("LongBar", "Error", "color"):
+                nominal = 180;
+                break;
+            case ("LongBar", "Error", "distance"):
+                nominal = 190;
+                break;
+            case ("WaitingRoomManager", "Rest Start", "n/a"):
+                nominal = 200;
+                break;
+            case ("WaitingRoomManager", "Rest Stop", "n/a"):
+                nominal = 210;
+                break;
+            default:
+                nominal = 0;
+                break;
+        }
+
+        switch (shape)
+        {
+            case ("A"):
+                nominal += 1;
+                break;
+            case ("B"):
+                nominal += 2;
+                break;
+            case ("C"):
+                nominal += 3;
+                break;
+            case ("D"):
+                nominal += 4;
+                break;
+            case ("E"):
+                nominal += 5;
+                break;
+            case ("F"):
+                nominal += 6;
+                break;
+            case ("G"):
+                nominal += 7;
+                break;
+            case ("H"):
+                nominal += 8;
+                break;
+            case ("Practice"):
+                nominal += 9;
+                break;
+            case ("PracticeColor"):
+                nominal += 0;
+                break;
+        }
+
+        sceneName = "n/a";
+        category = "n/a";
+        action = "n/a";
+        errorType = "n/a";
+        return nominal;
+    }
+
+    // Jalynn: LSL Requires this section
+    public void lslStuff(int nominal)
+    {
+        UnityEngine.Debug.Log("Jalynn: This is the nominal: " + nominal.ToString());
+        if (outlet != null)
+        {
+            sample[0] = nominal.ToString();
+            outlet.push_sample(sample);
+            UnityEngine.Debug.Log("Jalynn: Trigger sent");
+        }
+    }
 }
