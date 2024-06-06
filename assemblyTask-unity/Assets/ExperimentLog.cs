@@ -109,6 +109,7 @@ public class ExperimentLog : MonoBehaviour
         }
 
     }
+
     // This method adds a new line to the log file.
     public void AddData(string category = "n/a", string action = "n/a", string step = "n/a", string errorType = "n/a", string expected = "n/a", string actual = "n/a")
     {
@@ -122,29 +123,30 @@ public class ExperimentLog : MonoBehaviour
         string timeString = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, miliS);
         float timeSinceLastEvent = miliS - tempTime;
 
+        // Jalynn: Changed all of the ";" to ","
         string newLine = participantNumber.ToString();
         if (splitSceneName.Length == 3)
         {
-            newLine += ";" + splitSceneName[0];
-            newLine += ";" + splitSceneName[1];
-            newLine += ";" + splitSceneName[2];
+            newLine += "," + splitSceneName[0];
+            newLine += "," + splitSceneName[1];
+            newLine += "," + splitSceneName[2];
         }
         else
         {
-            newLine += ";" + sceneName;
-            newLine += ";" + "n/a";
-            newLine += ";" + "n/a";
+            newLine += "," + sceneName;
+            newLine += "," + "n/a";
+            newLine += "," + "n/a";
         }
-        newLine += ";" + manager.trialNumber.ToString();
-        newLine += ";" + DateTime.Now.ToString("HH:mm.ss");
-        newLine += ";" + Mathf.Round(miliS).ToString();
-        newLine += ";" + category;
-        newLine += ";" + action;
-        newLine += ";" + errorType;
-        newLine += ";" + expected;
-        newLine += ";" + actual;
-        newLine += ";" + step;
-        newLine += ";" + Mathf.Round(timeSinceLastEvent).ToString();
+        newLine += "," + manager.trialNumber.ToString();
+        newLine += "," + DateTime.Now.ToString("HH:mm.ss");
+        newLine += "," + Mathf.Round(miliS).ToString();
+        newLine += "," + category;
+        newLine += "," + action;
+        newLine += "," + errorType;
+        newLine += "," + expected;
+        newLine += "," + actual;
+        newLine += "," + step;
+        newLine += "," + Mathf.Round(timeSinceLastEvent).ToString();
         tempTime = miliS;
         using (writer = File.AppendText(filePath))
         {
@@ -162,38 +164,40 @@ public class ExperimentLog : MonoBehaviour
         string[] splitSceneName = sceneName.Split('_');
         string newLine = "";
         float miliSW = time_s * 1000;
+
+        // Jalynn: Changed all of the ";" to ","
         if (counter == 1)
         {
-            newLine = participantNumber.ToString() + ";";
+            newLine = participantNumber.ToString() + ",";
         }
 
         if (splitSceneName.Length == 3)
         {
             newLine += splitSceneName[0];
-            newLine += ";" + splitSceneName[1];
-            newLine += ";" + splitSceneName[2];
+            newLine += "," + splitSceneName[1];
+            newLine += "," + splitSceneName[2];
         }
         else
         {
             newLine += sceneName;
-            newLine += ";" + "n/a";
-            newLine += ";" + "n/a";
+            newLine += "," + "n/a";
+            newLine += "," + "n/a";
         }
-        newLine += ";" + manager.shapeNumber.ToString();
-        newLine += ";" + trialNumber.ToString();
-        newLine += ";" + Mathf.Round(miliSW).ToString();
-        newLine += ";" + mistakesMade.ToString() + ";";
+        newLine += "," + manager.shapeNumber.ToString();
+        newLine += "," + trialNumber.ToString();
+        newLine += "," + Mathf.Round(miliSW).ToString();
+        newLine += "," + mistakesMade.ToString() + ",";
 
         string[] lines = File.ReadAllLines(filePathW);
 
         if (counter == 1)
         {
-            lines[0] += "Participant_Number;Shape" + counter + ";Condition" + counter + ";Adaptivity" + counter + ";PositionInExp" + counter + ";Trial" + counter + ";TotalTime" + counter + ";MistakesMade" + counter + ";";
+            lines[0] += "Participant_Number,Shape" + counter + ",Condition" + counter + ",Adaptivity" + counter + ",PositionInExp" + counter + ",Trial" + counter + ",TotalTime" + counter + ",MistakesMade" + counter + ",";
             Debug.Log("Added Lines");
         }
         else
         {
-            lines[0] += "Shape" + counter + ";Condition" + counter + ";Adaptivity" + counter + ";PositionInExp" + counter + ";Trial" + counter + ";TotalTime" + counter + ";MistakesMade" + counter + ";";
+            lines[0] += "Shape" + counter + ",Condition" + counter + ",Adaptivity" + counter + ",PositionInExp" + counter + ",Trial" + counter + ",TotalTime" + counter + ",MistakesMade" + counter + ",";
             Debug.Log("Added Lines 2");
         }
         lines[^1] += newLine;
