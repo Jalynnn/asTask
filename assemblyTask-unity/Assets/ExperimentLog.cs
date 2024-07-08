@@ -158,7 +158,8 @@ public class ExperimentLog : MonoBehaviour
             newLine += "," + "n/a";
         }
         newLine += "," + manager.trialNumber.ToString();
-        newLine += "," + DateTime.Now.ToString("HH:mm.ss");
+        // Jalynn: Changed '.' to ':' for LSL timestamps ease
+        newLine += "," + DateTime.Now.ToString("HH:mm:ss");
         newLine += "," + Mathf.Round(miliS).ToString();
         newLine += "," + category;
         newLine += "," + action;
