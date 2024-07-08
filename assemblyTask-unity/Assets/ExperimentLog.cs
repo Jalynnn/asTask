@@ -239,9 +239,11 @@ public class ExperimentLog : MonoBehaviour
     public int NominalData(int eventNumber, string sceneName = "n/a", string category = "n/a", string action = "n/a", string errorType = "n/a")
     {
         UnityEngine.Debug.Log("Jalynn: This is the scene name: " + sceneName);
-        string[] splitSceneName = sceneName.Split('_');
+
         string shape = splitSceneName[0];
         UnityEngine.Debug.Log("Jalynn: This is the shape: " + shape);
+        string condition = splitSceneName[1];
+        UnityEngine.Debug.Log("Jalynn: This is the condition: " + condition);
 
         int nominal = 222; // Default is error
 
@@ -320,6 +322,7 @@ public class ExperimentLog : MonoBehaviour
                 break;
         }
 
+        /*
         switch (shape)
         {
             case ("A"):
@@ -351,6 +354,23 @@ public class ExperimentLog : MonoBehaviour
                 break;
             case ("PracticeColor"):
                 nominal += 0;
+                break;
+        }
+        */
+
+        switch(condition)
+        {
+            case ("A2"): // Low Ext Low Int
+                nominal += 2;
+                break;
+            case ("A3"): // Low Ext High Int
+                nominal += 3;
+                break;
+            case ("S2"): // High Ext Low Int
+                nominal += 4;
+                break;
+            case ("S3"): // High Ext High Int
+                nominal += 6;
                 break;
         }
 
