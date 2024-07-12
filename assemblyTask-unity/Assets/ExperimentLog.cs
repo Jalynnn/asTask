@@ -240,6 +240,7 @@ public class ExperimentLog : MonoBehaviour
     {
         UnityEngine.Debug.Log("Jalynn: This is the scene name: " + sceneName);
 
+        string[] splitSceneName = sceneName.Split('_');
         string shape = splitSceneName[0];
         UnityEngine.Debug.Log("Jalynn: This is the shape: " + shape);
         string condition = splitSceneName[1];
